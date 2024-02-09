@@ -5,7 +5,7 @@ displayString() [to create a string that contains the product info] and dump() [
 
 #include <sstream>
 #include <iomanip>
-#include "Movie.h"
+#include "movie.h"
 #include "util.h"
 
 using namespace std;
