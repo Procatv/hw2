@@ -8,6 +8,7 @@
 #include "product.h"
 #include "db_parser.h"
 #include "product_parser.h"
+#include "mydatastore.h"
 #include "util.h"
 
 using namespace std;
@@ -29,7 +30,7 @@ int main(int argc, char* argv[])
      * Declare your derived DataStore object here replacing
      *  DataStore type to your derived type
      ****************/
-    DataStore ds;
+    MyDataStore ds;
 
 
 
@@ -100,10 +101,43 @@ int main(int argc, char* argv[])
                 done = true;
             }
 	    /* Add support for other commands here */
+        
+            else if(cmd == "ADD"){
+                string username;
+                int hitNumber;
+                if(ss >> username >> hitNumber){
+                    //cout << "username: " << username << "hitnumber: " << hitNumber << endl;
+                    int idx = hitNumber -1;
+                    //cout << "idx: " << idx << "hits.size() " << hits.size() << endl;
+                    if(idx >= 0 && idx < static_cast<int>(hits.size())){
+                        ds.addToCart(username, idx);
+                    }else{
+                        cout << "Invalid search number " << endl;
+                    }
+                }
+            } else if(cmd == "VIEWCART"){
+                string username;
+                if(ss>>username){
+                    std::vector<Product*> userCarts = ds.getUserCart(username);
 
+                    if(!ds.isUserValid(username)){
+                        std::cout << "Invalid username" << std::endl;
+                    }
+                    else{
+                        ds.viewCart(username);
+                    }
+                    
+                }
+                else{
+                    std::cout << "Please provide a username to view cart." << std::endl;
+                }
 
-
-
+            } else if(cmd == "BUYCART"){
+                string username;
+                if(ss >> username){
+                    ds.buyCart(username);
+                }
+            }
             else {
                 cout << "Unknown command" << endl;
             }

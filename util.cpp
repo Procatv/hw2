@@ -15,16 +15,45 @@ std::string convToLower(std::string src)
     to a set of words based on the criteria given in the assignment **/
 std::set<std::string> parseStringToWords(string rawWords)
 {
+    set<string> keywords;
+    stringstream ss(rawWords);
+    string word;
 
+    //Capturing words & parsing until end
+    while(getline(ss, word, ' ')){ //split via spaces
 
+        //identifying ISBN's
+        if(word.length() == 15 && word[3] == '-' && word[13] == '-'){
+            keywords.insert(word);
+        }
+        else{
+            string buffer;
 
+            //convert to common-case
+            for(size_t i = 0; i < word.length(); ++i){
+                char c = word[i];
+                char lower_c = tolower(static_cast<unsigned char>(c));
 
+                //identify punctuations
+                if(ispunct(c)){
+                    if(buffer.length() > 1){
+                        keywords.insert(buffer);
+                    }
+                    buffer.clear();
+                }else{
+                    buffer.push_back(lower_c);
+                }
+            }
+            
+            
+            if(buffer.length() > 1){
+                keywords.insert(buffer);
+            }
 
+        }
+    }
 
-
-
-
-
+    return keywords;
 }
 
 /**************************************************
